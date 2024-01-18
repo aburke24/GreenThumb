@@ -1,137 +1,125 @@
 body {
-    overflow: hidden;
-  }
-.wholeBed{
+  
+}
+
+.wholeBed {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 90vh;
 }
-.bed{
- 
-    top:27%;
-    left:25%;
-    position: fixed;
-    justify-content: center;
-    align-items: center;
-    height: 75vh;
-}
-.name{
-    display:absolute;
-    left: 50%;
-   
-}
-.name::placeholder{
-    color:black;
+
+.bed {
+  position: fixed;
+  top: 27%;
+  left: 25%;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
 }
 
-.height{
-    text-align:center;
-    position: fixed;
-    top: 50%;
-    left: 5%;
-    padding:1%;
-    width:7%;
-    border-radius: 5%;
-    
-    
-
+.name {
+  position: absolute;
+  left: 50%;
 }
-.btnSave{
+
+.height {
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 5%;
+  padding: 1%;
+  width: 7%;
+  border-radius: 5%;
+}
+
+.btnSave,
+.btnDelete {
   background-color: blue;
-  color:white;
-  border-radius:15%;
-  padding:2%;
+  color: white;
+  border-radius: 15%;
+  padding: 2%;
   font-weight: bold;
   cursor: pointer;
-  
 }
-.btnDelete{
+
+.btnDelete {
   background-color: red;
-  color:white;
-  border-radius:15%;
-  padding:3%;
-  font-weight: bold;
-  cursor: pointer;
-  
+  padding: 3%;
 }
-.width{
-    position: fixed;
-    padding:1%;
-    width:10%;
-    text-align:center;
-    top: 79%;
-    left: 32%;
-    border-radius: 5%;
+
+.width {
+  position: fixed;
+  padding: 1%;
+  width: 10%;
+  text-align: center;
+  top: 79%;
+  left: 32%;
+  border-radius: 5%;
 }
-.name{
-    position: fixed;
-    padding:1%;
-    width:20%;
-    text-align:center;
-    top: 21%;
-    left: 27%;
-    border-radius: 5%;
+
+.name {
+  position: fixed;
+  padding: 1%;
+  width: 20%;
+  text-align: center;
+  top: 21%;
+  left: 27%;
+  border-radius: 5%;
 }
-.sideBar{
-    padding:30%;
-   
+
+.sideBar {
+  position: fixed;
+  top: 15%;
+  right: 1%;
+  height: 70vh;
+  width: 8%;
+  background-color: #006400;
+  color: #fff;
+  padding: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 25px;
 }
+
 .delete-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ccc;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .delete-modal p {
-    margin-bottom: 20px;
-  }
-  
-  .delete-modal button {
-    margin-right: 10px;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  .sideBar {
-    position: fixed;
-    top: 15%;
-    right: 1%;
-    height: 70vh; /* Adjust the height percentage as needed */
-    width: 8%;
-    background-color: #006400;
-    color: #fff;
-    padding: 5%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-  }
-  
-  .sideBar button {
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #004d00;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 50%; /* Make buttons perfect circles */
-    overflow: hidden;
-  }
-  
-  .sideBar button img {
-    width: 100%; /* Ensure the image takes the full width of the button */
-    border-radius: inherit; /* Preserve the circular shape of the button */
-  }
-  
-  .sideBar button:hover {
-    background-color: #003300;
-  }
-  
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.delete-modal p {
+  margin-bottom: 20px;
+}
+
+.delete-modal button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.sideBar button {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #004d00;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.sideBar button img {
+  width: 100%;
+  border-radius: inherit;
+}
+
+.sideBar button:hover {
+  background-color: #003300;
+}

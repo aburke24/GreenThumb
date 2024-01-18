@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import'./Styles.css';
 
 const Grid = ({ size }) => {
   const cellSize = 30; // Adjust the cell size as needed
@@ -34,9 +35,13 @@ const App = () => {
     const newSize = parseInt(e.target.value, 10);
     setGridSize(newSize);
   };
-
+  
+  const handleClick = () =>{
+    console.log("Clicked!!");
+  }
+  
   return (
-    <div>
+    <div onClick={handleClick}>
       <label>
         Grid Size:
         <input
