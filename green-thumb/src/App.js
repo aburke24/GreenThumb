@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+// App.jsx -- app name suggestion ---- Green Thumb ----
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './Pages/Home';
+import EditBed from './Pages/EditBed';
+import PlantInfoPage from './Pages/PlantInfoPage';
+import { useEffect, useState } from 'react';
 
-function App() {
+const App = () => {
+  const [beds, setBeds] = useState(JSON.parse(localStorage.getItem('beds')) || [] );
+
+  useEffect(() => {
+    localStorage.setItem('beds', JSON.stringify(beds))
+  },[beds])
+
+ 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home beds = {beds} setBeds={setBeds} />} />
+          <Route path="/edit-bed/:id" element={<EditBed beds= {beds} setBeds={setBeds}/>} />
+          <Route path="/plant-info/" component={PlantInfoPage} />
+        </Routes>
+      </BrowserRouter>
   );
-}
+};
 
 export default App;
