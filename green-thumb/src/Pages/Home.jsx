@@ -1,9 +1,10 @@
+// Home.jsx
 import React, { useState } from 'react';
-import GardenBed from '../GardenBed Comp/GardenBed';
+import GardenBed from '../GardenBed Comp/GardenBed.jsx';
 import './App.css';
 import { MdAdd, MdClose } from 'react-icons/md';
 import AddBedModal from '../components/AddBedModal';
-
+import { Link } from 'react-router-dom';
 
 const Home = ({ beds, setBeds }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -41,16 +42,23 @@ const Home = ({ beds, setBeds }) => {
       </header>
       <div className="beds">
         {filteredBeds.map((bed, index) => (
-          <GardenBed
-            displayName={true}
-            id={bed.id}
-            name={bed.name}
-            gardenSize={bed.gardenSize}
-            plants={bed.plants}
-            beds={beds}
-            setBeds={setBeds}
+          <Link
             key={index}
-          />
+            to={{
+              pathname: `/edit-bed/${bed.id}`,
+              state: { bed, beds, setBeds },
+            }}
+          >
+            <GardenBed
+              displayName={true}
+              id={bed.id}
+              name={bed.name}
+              gardenSize={bed.gardenSize}
+              plants={bed.plants}
+              beds={beds}
+              setBeds={setBeds}
+            />
+          </Link>
         ))}
       </div>
 

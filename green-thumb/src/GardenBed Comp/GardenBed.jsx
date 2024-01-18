@@ -3,9 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { GridContainer, GridItem } from './GardenBedStyles';
 import PropTypes from 'prop-types';
 import placeHolder from '../Assets/GardenBackground.jpeg';
-import { Link } from 'react-router-dom';
 
-const GardenBed = ({ id, name, gardenSize, beds, setBeds, displayName, addPlantsActive }) => {
+const GardenBed = ({ link, id, name, gardenSize, beds, setBeds, displayName, addPlantsActive }) => {
   const bed = {
     id,
     name,
@@ -43,39 +42,35 @@ const GardenBed = ({ id, name, gardenSize, beds, setBeds, displayName, addPlants
   };
 
   return (
-    <Link
-      to={{
-        pathname: `/edit-bed/${bed.id}`,
-        state: { bed, beds, setBeds },
-      }}
-    >
-      <div>
+    <div>
       <GridContainer style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
-          {initializeGridWithPlaceholder(rows, columns).map((plantImage, index) => (
-            <GridItem
-              key={index}
-              style={{
-                backgroundImage: `url(${plantImage})`,
-                border: index === selectedItem && addPlantsActive ? '2px solid green' : '2px solid white',
-                borderColor: index === hoveredItem && addPlantsActive ? 'green' : 'white',
-              }}
-              onClick={() => handleGridItemClick(index)}
-              onMouseEnter={() => handleGridItemHover(index)}
-              onMouseLeave={handleGridItemLeave}
-            />
-          ))}
-        </GridContainer>
-        {displayName && <h2>{name}</h2>}
-      </div>
-    </Link>
+        {initializeGridWithPlaceholder(rows, columns).map((plantImage, index) => (
+          <GridItem
+            key={index}
+            style={{
+              backgroundImage: `url(${plantImage})`,
+              border: index === selectedItem && addPlantsActive ? '2px solid green' : '2px solid white',
+              borderColor: index === hoveredItem && addPlantsActive ? 'green' : 'white',
+            }}
+            onClick={() => handleGridItemClick(index)}
+            onMouseEnter={() => handleGridItemHover(index)}
+            onMouseLeave={handleGridItemLeave}
+          />
+        ))}
+      </GridContainer>
+      {displayName && <h2>{name}</h2>}
+      {link}
+    </div>
   );
 };
+
 const initializeGridWithPlaceholder = (rows, columns) => {
   const placeholderImages = Array.from({ length: rows * columns }, () => placeHolder);
   return placeholderImages;
 };
 
 GardenBed.propTypes = {
+  link: PropTypes.element.isRequired, // Add this prop
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   gardenSize: PropTypes.shape({
