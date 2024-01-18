@@ -1,0 +1,35 @@
+/* YourCSSFile.css */
+
+.GridContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100%, 1fr)); /* Adjust the minimum and maximum size as needed */
+  border: 2px solid white;
+  border-radius: 3%;
+  gap: 0.2%;
+  height: 350px;
+  width: 140px;
+  padding: 2%;
+  background-color: rgb(113, 64, 29);
+}
+
+.GridItem {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid #ccc;
+  border-radius: 3%;
+  box-sizing: border-box;
+}
+
+.GardenBedName {
+  color: #333; /* Adjust the color as needed */
+  margin-top: 3px; /* Adjust the margin as needed */
+  text-align: left;
+  padding-left: 23%;
+  color: white;
+}
+.deleteButton{
+    left:5%;
+}

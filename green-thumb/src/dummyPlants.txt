@@ -1,0 +1,56 @@
+[
+  {
+    "image": "src/Assets/Cucumber.jpeg",
+    "name": "Cucumber",
+    "beneficialPlants": ["B1", "B2", "B3"],
+    "negativePlants": ["N1", "N2"]
+  },
+  {
+    "image": "src/Assets/Peppers.jpeg",
+    "name": "Peppers",
+    "beneficialPlants": ["B2", "B4", "B5"],
+    "negativePlants": ["N3", "N4"]
+  },
+  {
+    "image": "src/Assets/Tomato.jpeg",
+    "name": "Tomato",
+    "beneficialPlants": ["B2", "B4", "B5"],
+    "negativePlants": ["N3", "N4"]
+  },
+  {
+    "image": "src/Assets/Zinia.jpeg",
+    "name": "Zinia",
+    "beneficialPlants": ["B2", "B4", "B5"],
+    "negativePlants": ["N3", "N4"]
+  },
+  {
+    "image": "src/Assets/Egg Plant.jpeg",
+    "name": "Egg Plant",
+    "beneficialPlants": ["B2", "B4", "B5"],
+    "negativePlants": ["N3", "N4"]
+  },
+  {
+    "image": "src/Assets/Basil.jpeg",
+    "name": "Basil",
+    "beneficialPlants": ["B2", "B4", "B5"],
+    "negativePlants": ["N3", "N4"]
+  },
+  {
+    "image": "src/Assets/Cabbage.jpeg",
+    "name": "Cabbage",
+    "beneficialPlants": ["B2", "B4", "B5"],
+    "negativePlants": ["N3", "N4"]
+  },
+  {
+    "image": "src/Assets/Cilantro.jpeg",
+    "name": "Cilantro",
+    "beneficialPlants": ["B2", "B4", "B5"],
+    "negativePlants": ["N3", "N4"]
+  },
+  {
+    "image": "src/Assets/Dill.jpeg",
+    "name": "Dill",
+    "beneficialPlants": ["B2", "B4", "B5"],
+    "negativePlants": ["N3", "N4"]
+  },
+]

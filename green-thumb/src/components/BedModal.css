@@ -1,0 +1,59 @@
+/* BedModal.css */
+.modal {
+    position: fixed;
+    bottom: 5vh; /* Adjust the distance from the bottom as needed */
+    right: 5vw; /* Adjust the distance from the right as needed */
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center text content */
+   
+  }
+  
+  .modal-content {
+    margin-bottom: 10px; /* Add margin to separate the input fields */
+  }
+  
+  .modal label {
+    display: block; /* Make labels block elements to stack them vertically */
+    margin-bottom: 5px; /* Add margin between labels */
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: center; /* Center buttons horizontally */
+  }
+  
+  /* Style both buttons */
+  .modal-buttons button {
+    width: 50px; /* Adjust the width as needed */
+    height: 50px; /* Adjust the height as needed */
+    border-radius: 50%; /* Make the button round */
+    margin: 0 10px; /* Add margin between buttons */
+    color: #ffffff; /* Adjust the text color as needed */
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-weight: bold; /* Make the text bold */
+    transition: background-color 0.3s ease; /* Add a smooth transition effect */
+  }
+  
+  /* Style the Save button */
+  .modal-buttons button.save {
+    background-color: #2ecc71; /* Green background color */
+  }
+  
+  /* Style the Cancel button */
+  .modal-buttons button.cancel {
+    background-color: #e74c3c; /* Red background color */
+  }
+  
+  .modal-buttons button.save:hover {
+    background-color: #218d4e; /* Darker red on hover */
+  }
+  
+  .modal-buttons button.cancel:hover {
+    background-color: #c0392b; /* Darker red on hover */
+  }
+  

@@ -1,0 +1,11 @@
+/* PlantInfo.css */
+.plant-info {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .plant-info img {
+    max-width: 100%;
+    height: auto;
+  }
+  

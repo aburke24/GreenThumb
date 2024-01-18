@@ -1,0 +1,16 @@
+
+.modal-buttons button.Decline:hover {
+    background-color: #c0392b; /* Darker red on hover */
+}
+.modal-buttons button.confirm{
+    background-color: #2ecc71; /* Green background color */
+  }
+  
+  /* Style the Cancel button */
+  .modal-buttons button.Decline {
+    background-color: #e74c3c; /* Red background color */
+  }
+  
+  .modal-buttons button.confirm:hover {
+    background-color: #218d4e; /* Darker red on hover */
+  }
