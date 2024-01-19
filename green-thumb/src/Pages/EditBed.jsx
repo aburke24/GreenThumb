@@ -24,7 +24,7 @@ const EditBed = ({ bed, beds, setBeds }) => {
   const navigate = useNavigate();
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [addPlantsActive, setAddPlantsActive] = useState(false);
-  
+
   const handleHeightChange = (e) => {
     const newHeight = parseFloat(e.target.value);
     setHeight(newHeight);

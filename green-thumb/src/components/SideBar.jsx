@@ -1,5 +1,5 @@
 // SideBar.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -14,32 +14,54 @@ import './SideBar.css';
 
 const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive }) => {
   const [view, setView] = useState('default');
-
   const [selectedPlant, setSelectedPlant] = useState(null);
 
-  const handleClick = (buttonName) => {
-    if (buttonName === 'addPlants') {
-      setAddPlantsActive(true);
-      setView('addPlants');
-    } else if (buttonName === 'back') {
-      setView('default');
-    } else {
-      handleButtonClick();
-    }
-  };
-
   const handlePlantButtonClick = (plant) => {
-    setSelectedPlant(plant);
+    handleSelectedPlantChange(plant);
   };
 
+  const handleSelectedPlantChange = (selectedPlant) => {
+    // Add your logic to handle the selected plant change
+    console.log(`Selected Plant: ${selectedPlant}`);
+    // Deselect the currently selected plant button
+    deselectOtherButtonsInGroup('plantGroup', null);
+  };
+  
   const deselectOtherButtonsInGroup = (group, currentButton) => {
     const buttons = document.querySelectorAll(`.plantButton[group="${group}"]`);
     buttons.forEach((button) => {
       if (button !== currentButton) {
         // Deselect other buttons by updating their state directly
-        button.component.buttonSelected();
+        button.component.buttonSelected(false);
       }
     });
+  };
+
+  const resetPlantButtons = () => {
+    
+    const buttons = document.querySelectorAll('.plantButton');
+    buttons.forEach((button) => {
+      
+      // Check if button.component is defined before calling button.component.buttonSelected
+      if (button.component) {
+        console.log("All buttons deselected");
+        button.component.buttonSelected(false);
+        
+      }
+    });
+  };
+
+  const handleClick = (buttonName) => {
+    if (buttonName === 'addPlants') {
+      setAddPlantsActive(true);
+      setView('addPlants');
+      setSelectedPlant(null); // Reset selectedPlant when entering 'addPlants' view
+    } else if (buttonName === 'back') {
+      setView('default');
+      resetPlantButtons(); // Deselect all PlantButtons when back is clicked
+    } else {
+      handleButtonClick();
+    }
   };
 
   const renderButtons = () => {
@@ -48,7 +70,10 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive }) => 
       disabled: selectedPlant !== null && selectedPlant !== 'Plant 1',
       deselectOtherButtonsInGroup: () => deselectOtherButtonsInGroup('plantGroup'),
       group: 'plantGroup',
+      resetPlantButtons: resetPlantButtons, // Pass resetPlantButtons to PlantButton
+       // Ensure this is a function
     };
+    
 
     switch (view) {
       case 'addPlants':
