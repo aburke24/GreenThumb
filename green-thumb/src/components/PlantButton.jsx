@@ -1,4 +1,3 @@
-// PlantButton.js
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -8,31 +7,28 @@ class PlantButton extends React.Component {
     this.state = {
       selected: false,
     };
+    this.buttonRef = React.createRef();
   }
 
-  handleDoubleClick = () => {
-    // Check if setButtonContent is defined before calling it
-    if (this.props.setButtonContent) {
-      this.props.setButtonContent('Plant 2');
-    }
+  handleButtonClick = () => {
+    // Pass the size to the onButtonClick function
+    this.props.onButtonClick(this.props.size);
   };
 
   buttonSelected = (select = true) => {
-    // Call resetPlantButtons before handling selection logic
-    this.props.resetPlantButtons();
-
     this.setState(
       {
         selected: select,
       },
       () => {
-        // Log a message when the button is selected or deselected
+        // Check if resetButtonState is defined before calling it
+        if (this.props.resetButtonState && typeof this.props.resetButtonState === 'function') {
+          this.props.resetButtonState();
+        }
+
         console.log(this.state.selected ? 'Button selected!' : 'Button deselected!');
-
-        this.props.onClick(this.props.children, this.state.selected);
-
-        // Deselect others in the same group
-        this.props.deselectOtherButtonsInGroup(this.props.group, this);
+        // Callback to parent component
+        this.props.onClick(this.props.size, this.state.selected);
       }
     );
   };
@@ -46,26 +42,28 @@ class PlantButton extends React.Component {
 
     return (
       <button
-        onDoubleClick={this.handleDoubleClick}
+        ref={this.buttonRef}
+        onDoubleClick={this.handleButtonClick}
         style={buttonStyle}
-        onClick={() => this.buttonSelected(!this.state.selected)} // Toggle selection
+        onClick={() => this.buttonSelected(!this.state.selected)}
         disabled={this.props.disabled}
-        className={`plantButton ${this.props.group}`}
+        className={`plantButton ${this.props.group} ${selected ? 'selected' : ''}`}
       >
-        {this.props.children}
+        {/* You can customize the button appearance here */}
+        <div className={`plantButton-inner size-${this.props.size}`} style={{ backgroundColor: this.props.color }}></div>
       </button>
     );
   }
 }
 
 PlantButton.propTypes = {
-  children: PropTypes.node.isRequired,
+  size: PropTypes.number.isRequired,
+  color: PropTypes.string.isRequired,
+  onButtonClick: PropTypes.func.isRequired,
   onClick: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
-  deselectOtherButtonsInGroup: PropTypes.func,
+  resetButtonState: PropTypes.func,
   group: PropTypes.string,
-  setButtonContent: PropTypes.func, // Add setButtonContent to propTypes
-  resetPlantButtons: PropTypes.func, // Add resetPlantButtons to propTypes
 };
 
 export default PlantButton;
