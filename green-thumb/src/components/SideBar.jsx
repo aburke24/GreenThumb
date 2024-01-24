@@ -1,21 +1,16 @@
-// SideBar.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTrash,
-  faEraser,
-  faSyncAlt,
-  faArrowLeft,
-} from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEraser, faSyncAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import AddPlantsButton from './AddPlantsButton';
 import PlantButton from './PlantButton';
 import './SideBar.css';
 
+
 const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive }) => {
   const [view, setView] = useState('default');
   const [selectedButton, setSelectedButton] = useState(null);
- 
+  
 
   const handleClick = (buttonName) => {
     if (buttonName === 'addPlants') {
@@ -27,17 +22,11 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive }) => 
       handleButtonClick();
     }
   };
+
+  
   const handlePlantButtonClick = (size) => {
     // Deselect the currently selected button if clicked again
-    if (selectedButton === size) {
-      setSelectedButton(null);
-    } else {
-      // Select the clicked button
-      setSelectedButton(size);
-    }
-
-    // Callback to parent component
-    setSelectedButton(selectedButton === size ? 0 : size);
+    setSelectedButton((prevSelected) => (prevSelected === size ? null : size));
   };
 
   const renderButtons = () => {
@@ -48,18 +37,13 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive }) => 
             <button onClick={() => handleClick('back')}>
               <FontAwesomeIcon icon={faArrowLeft} /> Back
             </button>
-            {[1, 2, 3, 4, 5].map((index) => (
-              <PlantButton
-                key={index}
-                size={index}
-                color="rgba(255, 0, 0, 0.3)"
-                onButtonClick={() => {}}
-                onClick={() => handlePlantButtonClick(index)}
-                // Remove selected prop
-              >
-                Plant {index}
-              </PlantButton>
-            ))}
+            <PlantButton size={1} color="green" selected={selectedButton === 1} onClick={handlePlantButtonClick} image = "../Assets/Basil.jpeg" plant = "Basil"/>
+            <PlantButton size={2} color="green" selected={selectedButton === 2} onClick={handlePlantButtonClick} image = "../Assets/Tomato.jpeg" plant = "Tomato"/>
+            <PlantButton size={3} color="green" selected={selectedButton === 3} onClick={handlePlantButtonClick} image = "../Assets/Peppers.jpeg" plant = "Peppers"/>
+            <PlantButton size={4} color="green" selected={selectedButton === 4} onClick={handlePlantButtonClick} image = "../Assets/Dill.jpeg" plant = "Dill"/>
+            <PlantButton size={5} color="green" selected={selectedButton === 5} onClick={handlePlantButtonClick} image = "../Assets/Cabbage.jpeg" plant = "Cabbage"/>
+            <PlantButton size={6} color="green" selected={selectedButton === 6} onClick={handlePlantButtonClick} image = "../Assets/Egg Plant.jpeg" plant = "Egg Plant"/>
+          
           </>
         );
       default:
@@ -83,10 +67,13 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive }) => 
     }
   };
 
-  return <div className="sideBar">{renderButtons()}</div>;
+  return (
+    <div className="sideBar">
+      {renderButtons()}
+      
+    </div>
+  );
 };
-  
-    
 
 SideBar.propTypes = {
   handleButtonClick: PropTypes.func.isRequired,
