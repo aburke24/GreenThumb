@@ -17,6 +17,7 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selec
       console.log(addPlantsActive);
       setView('addPlants');
     } else if (buttonName === 'back') {
+      setSelectedButton(null);
       setAddPlantsActive(false);
       setView('default');
     } else {
@@ -26,7 +27,6 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selec
 
   
   const handlePlantButtonClick = (size) => {
-   
     // Deselect the currently selected button if clicked again
     setSelectedButton((prevSelected) => (prevSelected === size ? null : size));
   };

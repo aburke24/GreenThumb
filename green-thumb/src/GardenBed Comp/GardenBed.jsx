@@ -10,7 +10,7 @@ import TomatoImage from '../Assets/Tomato.jpeg';
 import CabbageImage from '../Assets/Cabbage.jpeg';
 import PepperImage from '../Assets/Peppers.jpeg';
 import EggPlantImage from '../Assets/Egg Plant.jpeg';
-import DillImage from '../Assets/Dill.jpeg';
+import DillImage from '../Assets/Dill.png';
 
 const GardenBed = ({ link, id, name, gardenSize, beds, setBeds, displayName, addPlantsActive, selectedButton }) => {
   const bed = {
