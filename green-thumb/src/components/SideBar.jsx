@@ -7,16 +7,17 @@ import PlantButton from './PlantButton';
 import './SideBar.css';
 
 
-const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive }) => {
+const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selectedButton,setSelectedButton }) => {
   const [view, setView] = useState('default');
-  const [selectedButton, setSelectedButton] = useState(null);
   
 
   const handleClick = (buttonName) => {
     if (buttonName === 'addPlants') {
       setAddPlantsActive(true);
+      console.log(addPlantsActive);
       setView('addPlants');
     } else if (buttonName === 'back') {
+      setAddPlantsActive(false);
       setView('default');
     } else {
       handleButtonClick();
@@ -25,6 +26,7 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive }) => 
 
   
   const handlePlantButtonClick = (size) => {
+   
     // Deselect the currently selected button if clicked again
     setSelectedButton((prevSelected) => (prevSelected === size ? null : size));
   };

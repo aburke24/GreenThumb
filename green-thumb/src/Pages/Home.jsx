@@ -57,6 +57,8 @@ const Home = ({ beds, setBeds }) => {
               plants={bed.plants}
               beds={beds}
               setBeds={setBeds}
+              addPlantsActive={false}
+              selectedButton={false}
             />
           </Link>
         ))}

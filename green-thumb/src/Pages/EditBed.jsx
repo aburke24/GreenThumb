@@ -11,6 +11,7 @@ const EditBed = ({ bed, beds, setBeds }) => {
   const { id } = useParams();
   const bedId = parseInt(id);
   const nbed = beds.find((item) => item && item.id === bedId);
+  const [selectedButton, setSelectedButton] = useState(null);
 
   const [name, setName] = useState(bed ? bed.name : '');
   const [plants, setPlants] = useState(bed ? bed.plants : []);
@@ -24,6 +25,7 @@ const EditBed = ({ bed, beds, setBeds }) => {
   const navigate = useNavigate();
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [addPlantsActive, setAddPlantsActive] = useState(false);
+  const [selectedPlantButton, setSelectedPlantButton] = useState(null);
 
   const handleHeightChange = (e) => {
     const newHeight = parseFloat(e.target.value);
@@ -158,6 +160,8 @@ const EditBed = ({ bed, beds, setBeds }) => {
           handleButtonClick={handleButtonClick}
           setAddPlantsActive={setAddPlantsActive}
           addPlantsActive={addPlantsActive}
+          selectedButton={selectedButton}
+          setSelectedButton={setSelectedButton}
         />
 
       <div className="bed">
@@ -170,9 +174,11 @@ const EditBed = ({ bed, beds, setBeds }) => {
           beds={beds}
           setBeds={setBeds}
           displayName={false}
+          addPlantsActive={addPlantsActive} 
           // Pass the clicked item index and handle function to GardenBed
           clickedItemIndex={clickedItemIndex}
           onGridItemClick={handleGridItemClick}
+          selectedButton ={selectedButton}
         />
       </div>
 
