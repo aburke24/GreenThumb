@@ -13,6 +13,7 @@ const EditBed = ({ bed, beds, setBeds }) => {
   const nbed = beds.find((item) => item && item.id === bedId);
   const [selectedButton, setSelectedButton] = useState(null);
 
+  // State for bed details
   const [name, setName] = useState(bed ? bed.name : '');
   const [plants, setPlants] = useState(bed ? bed.plants : []);
   const [gardenSize, setGardenSize] = useState({
@@ -21,12 +22,25 @@ const EditBed = ({ bed, beds, setBeds }) => {
   });
   const [height, setHeight] = useState(bed ? bed.gardenSize.height : 0);
   const [width, setWidth] = useState(bed ? bed.gardenSize.width : 0);
-  const [clickedItemIndex, setClickedItemIndex] = useState(null); // Track the clicked item index
-  const navigate = useNavigate();
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [addPlantsActive, setAddPlantsActive] = useState(false);
-  const [selectedPlantButton, setSelectedPlantButton] = useState(null);
 
+  // State for managing clicked item index
+  const [clickedItemIndex, setClickedItemIndex] = useState(null);
+
+  // State for tracking cleared status
+  const [isBedCleared, setIsBedCleared] = useState(false);
+
+  // Navigation
+  const navigate = useNavigate();
+
+  // Modal visibility state
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
+
+  // State for controlling addPlants functionality
+  const [addPlantsActive, setAddPlantsActive] = useState(false);
+  const [deletePlantActive, setDeletePlantActive] = useState(false);
+
+
+  // Handlers for input changes
   const handleHeightChange = (e) => {
     const newHeight = parseFloat(e.target.value);
     setHeight(newHeight);
@@ -39,15 +53,30 @@ const EditBed = ({ bed, beds, setBeds }) => {
     setGardenSize((prevGardenSize) => ({ ...prevGardenSize, width: newWidth }));
   };
 
+  // Effect to update height, width, and garden size when nbed changes
   useEffect(() => {
     setHeight(nbed.gardenSize.height);
     setWidth(nbed.gardenSize.width);
     setGardenSize({ height: nbed.gardenSize.height, width: nbed.gardenSize.width });
   }, [nbed]);
 
+  // Function to clear the bed
+  const clearBed = () => {
+    // Set the plants array to an empty array
+    setBeds((prevBeds) => {
+      const updatedBeds = prevBeds.map((prevBed) =>
+        prevBed.id === bedId ? { ...prevBed, plants: [] } : prevBed
+      );
+      return updatedBeds;
+    });
+
+    // Mark the bed as cleared
+    setIsBedCleared(true);
+  };
+
+  // Handler for saving changes to the bed
   const handleBed = (e) => {
     e.preventDefault();
-    console.log('Updated Garden Size: ', gardenSize);
 
     if (name || gardenSize.height || gardenSize.width) {
       const updatedBed = { ...nbed, plants };
@@ -60,31 +89,37 @@ const EditBed = ({ bed, beds, setBeds }) => {
         updatedBed.gardenSize = { ...gardenSize };
       }
 
-      const newBeds = beds.map((item) => (item.id === bedId ? updatedBed : item));
+      // Save gridContent as an array to local storage
+      localStorage.setItem(`plants_${bedId}`, JSON.stringify(updatedBed.plants));
+    }
 
-      setBeds(newBeds);
+    // Clear the bed if it was marked as cleared
+    if (isBedCleared) {
+      clearBed();
     }
 
     navigate('/');
   };
 
+  // Handler for button clicks
   const handleButtonClick = (buttonLabel) => {
-    // Handle button click based on the label
     console.log(`Button "${buttonLabel}" clicked`);
-    // Add your logic here
   };
 
+  // Handler for deleting the bed
   const handleDelete = (e) => {
     e.stopPropagation();
     setIsDeleteModalVisible(true);
     document.body.addEventListener('click', handleCancelDeleteOutside);
   };
 
+  // Handler for cancelling the delete action
   const handleCancelDelete = () => {
     setIsDeleteModalVisible(false);
     document.body.removeEventListener('click', handleCancelDeleteOutside);
   };
 
+  // Handler for clicking outside the delete modal to cancel
   const handleCancelDeleteOutside = (e) => {
     const modal = document.querySelector('.modal');
     const deleteButton = document.querySelector('.btnDelete');
@@ -95,6 +130,7 @@ const EditBed = ({ bed, beds, setBeds }) => {
     }
   };
 
+  // Handler for confirming the delete action
   const handleConfirmDelete = () => {
     const newBeds = beds.filter((item) => item.id !== bedId);
     setBeds(newBeds);
@@ -103,16 +139,11 @@ const EditBed = ({ bed, beds, setBeds }) => {
     document.body.removeEventListener('click', handleCancelDeleteOutside);
   };
 
-  // make a method that checks if the add plants button has been clicked
-  //  if the button is clicked it adds corresponding image to the gridItem
-  // That was clicked.
-  const AddingPlant =()=>{
-    
-  };
+  // Handler for clicking on a grid item
   const handleGridItemClick = (index) => {
-    // Set the clicked item index in the state
     setClickedItemIndex(index);
   };
+
   return (
     <div>
       <header>
@@ -122,13 +153,7 @@ const EditBed = ({ bed, beds, setBeds }) => {
           </Link>
         </div>
         <h1>Edit Garden Bed</h1>
-
-        {/* Pass setAddPlantsActive to SideBar */}
-        <button
-          className="btnSave"
-          onClick={handleBed}
-          style={{ marginRight: '10px' }}
-        >
+        <button className="btnSave" onClick={handleBed} style={{ marginRight: '10px' }}>
           Save Changes
         </button>
         <button className="btnDelete" onClick={handleDelete}>
@@ -155,32 +180,36 @@ const EditBed = ({ bed, beds, setBeds }) => {
           autoFocus
         />
 
-        {/* Pass setAddPlantsActive to SideBar */}
         <SideBar
           handleButtonClick={handleButtonClick}
           setAddPlantsActive={setAddPlantsActive}
           addPlantsActive={addPlantsActive}
           selectedButton={selectedButton}
           setSelectedButton={setSelectedButton}
+          onClearBedClick={clearBed} 
+          deletePlantActive={deletePlantActive}
+          setDeletePlantActive={setDeletePlantActive}
         />
 
-      <div className="bed">
-        <GardenBed
-          key={`${gardenSize.height}-${gardenSize.width}`}
-          id={nbed.id}
-          name={nbed.name}
-          gardenSize={gardenSize}
-          plants={nbed.plants}
-          beds={beds}
-          setBeds={setBeds}
-          displayName={false}
-          addPlantsActive={addPlantsActive} 
-          // Pass the clicked item index and handle function to GardenBed
-          clickedItemIndex={clickedItemIndex}
-          onGridItemClick={handleGridItemClick}
-          selectedButton ={selectedButton}
-        />
-      </div>
+        <div className="bed">
+          <GardenBed
+            key={`${gardenSize.height}-${gardenSize.width}`}
+            id={nbed.id}
+            name={nbed.name}
+            gardenSize={gardenSize}
+            plants={nbed.plants}
+            beds={beds}
+            setBeds={setBeds}
+            displayName={false}
+            addPlantsActive={addPlantsActive}
+            clickedItemIndex={clickedItemIndex}
+            onGridItemClick={handleGridItemClick}
+            selectedButton={selectedButton}
+            isBedCleared={isBedCleared}
+            setIsBedCleared={setIsBedCleared}
+            deletePlantActive={deletePlantActive}
+          />
+        </div>
 
         <input
           className="width"

@@ -7,25 +7,43 @@ import PlantButton from './PlantButton';
 import './SideBar.css';
 
 
-const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selectedButton,setSelectedButton }) => {
+const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selectedButton,setSelectedButton, onClearBedClick, deletePlantActive, setDeletePlantActive}) => {
   const [view, setView] = useState('default');
   
 
   const handleClick = (buttonName) => {
     if (buttonName === 'addPlants') {
       setAddPlantsActive(true);
-      console.log(addPlantsActive);
+      setDeletePlantActive(false);
       setView('addPlants');
     } else if (buttonName === 'back') {
       setSelectedButton(null);
       setAddPlantsActive(false);
       setView('default');
-    } else {
+    } else if (buttonName === 'clearBed') {
+
+      setDeletePlantActive(false);
+      onClearBedClick();
+    } 
+    else if (buttonName === 'deletePlant') {
+      deletePlant();
+    } 
+    else if (buttonName === 'generateBed') {
+      setDeletePlantActive(false);
+    } 
+    else {
       handleButtonClick();
     }
   };
 
-  
+  const deletePlant = () =>{
+    if(deletePlantActive == false){
+      // if its not selected select it
+      setDeletePlantActive(true);
+    } else{
+      setDeletePlantActive(false);
+    }
+  }
   const handlePlantButtonClick = (size) => {
     // Deselect the currently selected button if clicked again
     setSelectedButton((prevSelected) => (prevSelected === size ? null : size));
@@ -51,17 +69,25 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selec
       default:
         return (
           <>
-            <AddPlantsButton
+            <AddPlantsButton className ="SidebarButton"
               onClick={() => handleClick('addPlants')}
               setAddPlantsActive={setAddPlantsActive}
+              
             />
-            <button onClick={() => handleClick('clearBed')}>
+            <button className ="SidebarButton"
+            style={{backgroundColor:'darkgreen'}}
+            onClick={() => handleClick('clearBed')}>
               <FontAwesomeIcon icon={faEraser} /> Clear Bed
             </button>
-            <button onClick={() => handleClick('deletePlant')}>
-              <FontAwesomeIcon icon={faTrash} /> Delete Plant
-            </button>
-            <button onClick={() => handleClick('generateBed')}>
+            <button 
+            onClick={() => handleClick('deletePlant')}
+            style={{ backgroundColor: deletePlantActive ? 'green' : 'darkgreen' }}
+          >
+            <FontAwesomeIcon icon={faTrash} /> Delete Plant
+          </button>
+            <button className ="SidebarButton"
+            style={{backgroundColor:'darkgreen'}}
+            onClick={() => handleClick('generateBed')}>
               <FontAwesomeIcon icon={faSyncAlt} /> Generate Bed
             </button>
           </>

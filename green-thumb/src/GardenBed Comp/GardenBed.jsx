@@ -1,7 +1,6 @@
-// GardenBed.jsx
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import GridItem from './gridItem'; // Ensure the correct import path
+import GridItem from './gridItem';
 import placeHolder from '../Assets/GardenBackground.jpeg';
 import { useLocation } from 'react-router-dom';
 import './Styles.css';
@@ -12,22 +11,27 @@ import PepperImage from '../Assets/Peppers.jpeg';
 import EggPlantImage from '../Assets/Egg Plant.jpeg';
 import DillImage from '../Assets/Dill.png';
 
-const GardenBed = ({ link, id, name, gardenSize, beds, setBeds, displayName, addPlantsActive, selectedButton }) => {
+const GardenBed = ({ link, id, name, gardenSize, plants, beds, setBeds, displayName, addPlantsActive, selectedButton, isBedCleared, setIsBedCleared, deletePlantActive}) => {
   const bed = {
     id,
     name,
     gardenSize,
+    plants
   };
-  // this holds the images
-  const [gridContent, setGridContent] = useState(Array(gardenSize.height * gardenSize.width).fill(null));
+
+  const [gridContent, setGridContent] = useState(() => {
+    // Initialize from plants array or create an empty grid
+    return plants || Array(gardenSize.height * gardenSize.width).fill(null);
+  });
 
   const location = useLocation();
-  const isEditBedPage = location.pathname.includes('/edit-bed'); // Check if it's the EditBed page
+  const isEditBedPage = location.pathname.includes('/edit-bed');
 
   const [selectedItem, setSelectedItem] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null);
 
   const handleGridItemClick = (rowIndex, colIndex) => {
+    if(addPlantsActive || deletePlantActive){
     const cellIndex = rowIndex * gardenSize.width + colIndex;
     const newContent = [...gridContent];
 
@@ -35,7 +39,22 @@ const GardenBed = ({ link, id, name, gardenSize, beds, setBeds, displayName, add
     newContent[cellIndex] = getSelectedContent();
 
     setGridContent(newContent);
-    setSelectedItem(cellIndex); // Add this line to set the selected item
+    setSelectedItem(cellIndex);
+
+    // Save updated grid content to the plants array
+    saveGridToPlants(newContent);
+    }
+  };
+
+  const saveGridToPlants = (content) => {
+    // Assuming plants is an array in the component's state
+    // Update plants with the new content
+    setBeds((prevBeds) => {
+      const updatedBeds = prevBeds.map((prevBed) =>
+        prevBed.id === id ? { ...prevBed, plants: content } : prevBed
+      );
+      return updatedBeds;
+    });
   };
 
   const getSelectedContent = () => {
@@ -62,6 +81,7 @@ const GardenBed = ({ link, id, name, gardenSize, beds, setBeds, displayName, add
     if (addPlantsActive) {
       setHoveredItem(index);
     }
+    
   };
 
   const handleGridItemLeave = () => {
@@ -69,6 +89,23 @@ const GardenBed = ({ link, id, name, gardenSize, beds, setBeds, displayName, add
       setHoveredItem(null);
     }
   };
+
+  useEffect(() => {
+    if (isBedCleared) {
+      // If isBedCleared is true, perform the actions to reload or clear the garden bed
+      // For example, reset the gridContent or perform any other necessary actions
+
+      // Reset gridContent to an empty grid
+      setGridContent(Array(gardenSize.height * gardenSize.width).fill(null));
+      setIsBedCleared(false);
+
+      // Additional actions if needed
+    } else if (!isEditBedPage) {
+      // Additional initialization when not in edit mode
+      // For example, loading grid content from plants array
+      setGridContent(plants || Array(gardenSize.height * gardenSize.width).fill(null));
+    }
+  }, [isBedCleared, id, isEditBedPage, plants, gardenSize]);
 
   return (
     <div>
@@ -78,7 +115,7 @@ const GardenBed = ({ link, id, name, gardenSize, beds, setBeds, displayName, add
             {[...Array(gardenSize.width)].map((_, colIndex) => (
               <GridItem
                 key={colIndex}
-                backgroundImage={gridContent[rowIndex * gardenSize.width + colIndex]?.image || placeHolder} // Pass selected content's image or default placeholder
+                backgroundImage={gridContent[rowIndex * gardenSize.width + colIndex]?.image || placeHolder}
                 isSelected={rowIndex * gardenSize.width + colIndex === selectedItem && addPlantsActive}
                 isHovered={rowIndex * gardenSize.width + colIndex === hoveredItem && addPlantsActive}
                 onClick={() => handleGridItemClick(rowIndex, colIndex)}
@@ -103,7 +140,11 @@ GardenBed.propTypes = {
     height: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
   }).isRequired,
+  beds: PropTypes.array.isRequired,
+  setBeds: PropTypes.func.isRequired,
+  displayName: PropTypes.bool,
   addPlantsActive: PropTypes.bool.isRequired,
+  selectedButton: PropTypes.number,
 };
 
 export default GardenBed;

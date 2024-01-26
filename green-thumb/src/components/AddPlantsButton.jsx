@@ -12,7 +12,8 @@ const AddPlantsButton = ({ onClick, setAddPlantsActive }) => {
   };
 
   return (
-    <button onClick={handleClick}>
+    <button onClick={handleClick}
+    style={{backgroundColor:'darkgreen'}}>
       <FontAwesomeIcon icon={faSeedling} /> Add Plants
     </button>
   );
