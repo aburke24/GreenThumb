@@ -2,6 +2,7 @@
 
 .grid-container {
   display: flex;
+  
 }
 
 .grid {
@@ -44,4 +45,11 @@
 
 .app-container {
   display: flex; /* Use flexbox to arrange Sidebar and Grid side by side */
+}
+.centered-name {
+  text-align: center;
+  color: white;
+  text-decoration: underline;
+  font-size: 1rem; /* Adjust the font size as needed */
+  margin: 0 auto; /* Center the element horizontally */
 }

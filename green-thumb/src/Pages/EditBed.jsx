@@ -6,7 +6,20 @@ import GardenBed from '../GardenBed Comp/GardenBed';
 import './EditBed.css';
 import DeleteModal from '../components/DeleteModal';
 import SideBar from '../components/SideBar';
+import { MdCheck, MdClose } from 'react-icons/md';
+import BasilImage from '../Assets/Basil.jpeg';
+import TomatoImage from '../Assets/Tomato.jpeg';
+import CabbageImage from '../Assets/Cabbage.jpeg';
+import PepperImage from '../Assets/Peppers.jpeg';
+import EggPlantImage from '../Assets/Egg Plant.jpeg';
+import DillImage from '../Assets/Dill.png';
 
+const plantImages = [BasilImage, TomatoImage, PepperImage, DillImage, CabbageImage, EggPlantImage];
+
+  const getRandomPlantImage = () => {
+    const randomIndex = Math.floor(Math.random() * plantImages.length);
+    return plantImages[randomIndex];
+  };
 const EditBed = ({ bed, beds, setBeds }) => {
   const { id } = useParams();
   const bedId = parseInt(id);
@@ -39,13 +52,31 @@ const EditBed = ({ bed, beds, setBeds }) => {
   const [addPlantsActive, setAddPlantsActive] = useState(false);
   const [deletePlantActive, setDeletePlantActive] = useState(false);
 
-
+  
   // Handlers for input changes
   const handleHeightChange = (e) => {
     const newHeight = parseFloat(e.target.value);
     setHeight(newHeight);
     setGardenSize((prevGardenSize) => ({ ...prevGardenSize, height: newHeight }));
   };
+  const generateBed = () => {
+    // Generate a random plant image for each grid item
+    const newPlants = Array(gardenSize.height * gardenSize.width).fill(null).map(() => ({
+      image: getRandomPlantImage(),
+    }));
+
+    // Save the generated bed to the state
+    setBeds((prevBeds) => {
+      const updatedBeds = prevBeds.map((prevBed) =>
+        prevBed.id === bedId ? { ...prevBed, plants: newPlants } : prevBed
+      );
+      return updatedBeds;
+    });
+
+    // Set the generated bed to the current bed state
+    setPlants(newPlants);
+  };
+
 
   const handleWidthChange = (e) => {
     const newWidth = parseFloat(e.target.value);
@@ -149,19 +180,9 @@ const EditBed = ({ bed, beds, setBeds }) => {
       <header>
         <div className="backArrow">
           <Link to="/">
-            <IoIosArrowBack /> Back
+            <IoIosArrowBack /> 
           </Link>
         </div>
-        <h1>Edit Garden Bed</h1>
-        <button className="btnSave" onClick={handleBed} style={{ marginRight: '10px' }}>
-          Save Changes
-        </button>
-        <button className="btnDelete" onClick={handleDelete}>
-          Delete Bed
-        </button>
-      </header>
-
-      <div className="wholeBed">
         <input
           className="name"
           type="text"
@@ -170,7 +191,9 @@ const EditBed = ({ bed, beds, setBeds }) => {
           onChange={(e) => setName(e.target.value)}
           autoFocus
         />
+        <div className ="Dimensions" >
 
+        <label for="height">  Height: </label>
         <input
           type="number"
           className="height"
@@ -179,6 +202,26 @@ const EditBed = ({ bed, beds, setBeds }) => {
           onChange={handleHeightChange}
           autoFocus
         />
+        <label for="width"> Width: </label>
+        <input
+          className="width"
+          type="number"
+          placeholder={nbed.gardenSize.width}
+          value={width}
+          onChange={handleWidthChange}
+          autoFocus
+        />
+        
+        </div>
+        <button className="btnSave" onClick={handleBed} style={{ marginRight: '10px' }}>
+          <MdCheck style={{ fontWeight: 'bold' }}/> 
+        </button>
+        
+
+      </header>
+
+      
+        
 
         <SideBar
           handleButtonClick={handleButtonClick}
@@ -189,6 +232,7 @@ const EditBed = ({ bed, beds, setBeds }) => {
           onClearBedClick={clearBed} 
           deletePlantActive={deletePlantActive}
           setDeletePlantActive={setDeletePlantActive}
+          generateBed={generateBed}
         />
 
         <div className="bed">
@@ -208,18 +252,15 @@ const EditBed = ({ bed, beds, setBeds }) => {
             isBedCleared={isBedCleared}
             setIsBedCleared={setIsBedCleared}
             deletePlantActive={deletePlantActive}
+            generateBed={generateBed}
+            isMainPage={false}
           />
         </div>
+        
+        <button className="btnDelete" onClick={handleDelete}>
+         Delete Bed
+        </button>
 
-        <input
-          className="width"
-          type="number"
-          placeholder={nbed.gardenSize.width}
-          value={width}
-          onChange={handleWidthChange}
-          autoFocus
-        />
-      </div>
       {isDeleteModalVisible && (
         <DeleteModal onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
       )}

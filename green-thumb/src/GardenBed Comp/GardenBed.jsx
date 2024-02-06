@@ -11,14 +11,43 @@ import PepperImage from '../Assets/Peppers.jpeg';
 import EggPlantImage from '../Assets/Egg Plant.jpeg';
 import DillImage from '../Assets/Dill.png';
 
-const GardenBed = ({ link, id, name, gardenSize, plants, beds, setBeds, displayName, addPlantsActive, selectedButton, isBedCleared, setIsBedCleared, deletePlantActive}) => {
+const GardenBed = ({ link, id, name, gardenSize, plants, beds, setBeds, displayName, addPlantsActive, selectedButton, isBedCleared, setIsBedCleared, deletePlantActive,isMainPage}) => {
   const bed = {
     id,
     name,
     gardenSize,
     plants
   };
+  const calculateDynamicWidth = () => {
+    if (isMainPage) {
+      const maxGridCellWidth = 200; // Set your maximum width
+      const minGridCellWidth = 120; // Set your minimum width or adjust as needed
+      const screenWidth = window.innerWidth;
 
+      // Calculate the number of columns based on the screen width
+      const gridColumns = Math.floor(screenWidth / maxGridCellWidth);
+
+      // Ensure a minimum number of columns
+      const effectiveGridColumns = Math.max(1, gridColumns);
+
+      // Calculate the actual width of each grid cell
+      const actualGridCellWidth = Math.min(
+        maxGridCellWidth,
+        screenWidth / effectiveGridColumns
+      );
+
+      // Set the CSS variable for grid cell width
+      document.documentElement.style.setProperty(
+        "--grid-columns",
+        effectiveGridColumns
+      );
+
+      return `${actualGridCellWidth}px`;
+    }
+
+    // Return a default width if not on the main page
+    return '100%';
+  };
   const [gridContent, setGridContent] = useState(() => {
     // Initialize from plants array or create an empty grid
     return plants || Array(gardenSize.height * gardenSize.width).fill(null);
@@ -109,7 +138,7 @@ const GardenBed = ({ link, id, name, gardenSize, plants, beds, setBeds, displayN
 
   return (
     <div>
-      <div className="grid-container">
+      <div className="grid-container" style={{ '--max-grid-cell-width': calculateDynamicWidth()}}>
         {[...Array(gardenSize.height)].map((_, rowIndex) => (
           <div key={rowIndex} className="grid-row">
             {[...Array(gardenSize.width)].map((_, colIndex) => (
@@ -126,7 +155,7 @@ const GardenBed = ({ link, id, name, gardenSize, plants, beds, setBeds, displayN
           </div>
         ))}
       </div>
-      {displayName && <h2>{name}</h2>}
+      {displayName && <h2 className="centered-name">{name}</h2>}
       {link}
     </div>
   );
@@ -145,6 +174,7 @@ GardenBed.propTypes = {
   displayName: PropTypes.bool,
   addPlantsActive: PropTypes.bool.isRequired,
   selectedButton: PropTypes.number,
+  isMainPage: PropTypes.bool,
 };
 
 export default GardenBed;

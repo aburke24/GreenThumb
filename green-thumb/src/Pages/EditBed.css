@@ -1,78 +1,194 @@
-body {
-  
+body, html {
+  height: 100%; /* Set height to 100% */
+  margin: 0;
+  overflow: hidden;
 }
 
-.wholeBed {
+header {
+  padding: 10px;
+  text-align: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: darkgreen;
+  margin-bottom: 10%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%; /* Set height to 100% */
+  margin: 0;
+  overflow: hidden;
+}
+/* YourComponent.css */
+.backArrow {
+  padding-right: 5%;
+  font-weight: bold;
+  color: white;
+  font-size: 24px;
+  position: relative;
+}
+
+.backArrow:hover::after {
+  content: "Return to Home Screen";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: normal;
+  opacity: 1;
+  font-size:10px;
+}
+
+.backArrow::after {
+  content: "Return to Home Screen";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  font-size: 20px;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: bolder;
+  opacity: 0;
+}
+
+
+.name {
+  text-align: center;
+  padding: 1%;
+  margin: 20px auto;
+  border-radius: 5%;
+}
+.name::placeholder {
+  color: black; /* Set the placeholder text color to black */
+}
+.bed {
+  position: fixed;
+  top: 15%;
+  left: 1%;
+  height: 40vh;
+  width: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 90vh;
+  z-index: 1;
 }
 
-.bed {
-  position: fixed;
-  top: 27%;
-  left: 25%;
-  justify-content: center;
-  align-items: center;
-  height: 75vh;
+.dimensions {
+  display: flex;
+  
 }
 
-.name {
-  position: absolute;
-  left: 50%;
-}
-
-.height {
+.dimension {
+  display: flex;
+  flex-direction: column;
   text-align: center;
-  position: fixed;
-  top: 50%;
-  left: 5%;
-  padding: 1%;
-  width: 7%;
-  border-radius: 5%;
+  
 }
 
-.btnSave,
-.btnDelete {
-  background-color: blue;
+label {
+  font-weight: bold;
+  color:white;
+  font-size:0.75rem;
+}
+
+.height,
+.width {
+  width: 10%;
+  padding: 1%;
+  border-radius: 5%;
+  text-align:center;
+  
+}
+
+.btnSave {
+  position: relative;
+  background-color: rgb(82, 193, 65);
   color: white;
-  border-radius: 15%;
+  border-radius: 20%;
   padding: 2%;
   font-weight: bold;
   cursor: pointer;
+  width: 10%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  right: 20px;/* Add margin to the left for space */
+  transition: all 0.3s ease;
+  font-size: 24px; /* Add a smooth transition effect */
 }
+
+.btnSave:hover::after {
+  content: "Save Changes"; /* Display "Save Changes" on hover */
+  position: absolute;
+  top: 100%; /* Position below the button */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for centering */
+  background-color: rgba(0, 0, 0, 0.8); /* Background color for the tooltip */
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: normal;
+  opacity: 1;
+  font-size:10px; /* Make it visible on hover */
+}
+
+.btnSave::after {
+  content: "Save Changes"; /* Default hidden content */
+  position: absolute;
+  top: 100%; /* Position below the button */
+  left: 50%; /* Center horizontally */
+  transform: translateX(-50%); /* Adjust for centering */
+  background-color: rgba(0, 0, 0, 0.8); /* Background color for the tooltip */
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: bolder;
+  opacity: 0; /* Make it invisible by default */
+}
+
 
 .btnDelete {
-  background-color: red;
+  position: fixed;
+  bottom:30%;
+  left:10%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: #e74c3c;
+  color: white;
+  border-radius:15%;
   padding: 3%;
+  font-weight: bold;
+  cursor: pointer;
+  width:25%;
 }
 
-.width {
-  position: fixed;
-  padding: 1%;
-  width: 10%;
-  text-align: center;
-  top: 79%;
-  left: 32%;
-  border-radius: 5%;
+.btnDelete:hover{
+  background-color: #c0392b;
 }
 
-.name {
-  position: fixed;
-  padding: 1%;
-  width: 20%;
-  text-align: center;
-  top: 21%;
-  left: 27%;
-  border-radius: 5%;
-}
 
 .sideBar {
   position: fixed;
   top: 15%;
   right: 1%;
-  height: 70vh;
+  height: 40vh;
   width: 8%;
   background-color: #006400;
   color: #fff;

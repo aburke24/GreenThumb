@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Pages/Home';
 import EditBed from './Pages/EditBed';
-import PlantInfoPage from './Pages/PlantInfoPage';
+
 import { useEffect, useState } from 'react';
 
 const App = () => {
@@ -20,7 +20,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home beds = {beds} setBeds={setBeds} />} />
           <Route path="/edit-bed/:id" element={<EditBed beds= {beds} setBeds={setBeds}/>} />
-          <Route path="/plant-info/" component={PlantInfoPage} />
+         
         </Routes>
       </BrowserRouter>
   );

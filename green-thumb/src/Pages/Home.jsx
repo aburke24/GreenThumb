@@ -40,6 +40,7 @@ const Home = ({ beds, setBeds }) => {
           </button>
         </div>
       </header>
+      <body>
       <div className="beds">
         {filteredBeds.map((bed, index) => (
           <Link
@@ -49,7 +50,7 @@ const Home = ({ beds, setBeds }) => {
               state: { bed, beds, setBeds },
             }}
           >
-            <GardenBed
+            <GardenBed className = "GardenBed"
               displayName={true}
               id={bed.id}
               name={bed.name}
@@ -59,6 +60,11 @@ const Home = ({ beds, setBeds }) => {
               setBeds={setBeds}
               addPlantsActive={false}
               selectedButton={false}
+              isBedCleared={false}
+              setIsBedCleared={false}
+              deletePlantActive={false}
+              generateBed={false}
+              isMainPage={true}
             />
           </Link>
         ))}
@@ -78,7 +84,9 @@ const Home = ({ beds, setBeds }) => {
           <AddBedModal onClose={toggleModalVisibility} onSave={handleModalSave} setBeds={setBeds} />
         )}
       </div>
+      </body>
     </div>
+    
   );
 };
 

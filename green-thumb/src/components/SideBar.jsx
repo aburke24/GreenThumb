@@ -7,7 +7,7 @@ import PlantButton from './PlantButton';
 import './SideBar.css';
 
 
-const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selectedButton,setSelectedButton, onClearBedClick, deletePlantActive, setDeletePlantActive}) => {
+const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selectedButton,setSelectedButton, onClearBedClick, deletePlantActive, setDeletePlantActive, generateBed}) => {
   const [view, setView] = useState('default');
   
 
@@ -30,6 +30,8 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selec
     } 
     else if (buttonName === 'generateBed') {
       setDeletePlantActive(false);
+      generateBed()
+
     } 
     else {
       handleButtonClick();
@@ -37,7 +39,7 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selec
   };
 
   const deletePlant = () =>{
-    if(deletePlantActive == false){
+    if(deletePlantActive === false){
       // if its not selected select it
       setDeletePlantActive(true);
     } else{
@@ -55,7 +57,7 @@ const SideBar = ({ handleButtonClick, addPlantsActive, setAddPlantsActive, selec
         return (
           <>
             <button onClick={() => handleClick('back')}>
-              <FontAwesomeIcon icon={faArrowLeft} /> Back
+              <FontAwesomeIcon icon={faArrowLeft} /> 
             </button>
             <PlantButton size={1} color="green" selected={selectedButton === 1} onClick={handlePlantButtonClick} image = "../Assets/Basil.jpeg" plant = "Basil"/>
             <PlantButton size={2} color="green" selected={selectedButton === 2} onClick={handlePlantButtonClick} image = "../Assets/Tomato.jpeg" plant = "Tomato"/>
