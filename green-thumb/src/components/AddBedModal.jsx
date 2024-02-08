@@ -78,7 +78,7 @@ const AddBedModal = ({ onClose, onSave, setBeds }) => {
           />
         </label>
         <label>
-          Long Side:
+          Height:
           <input
             type="number"
             value={height}

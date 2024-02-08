@@ -15,7 +15,9 @@ header {
   justify-content: space-between;
   align-items: center;
   background-color: darkgreen;
-  margin-bottom: 10%;
+  margin-bottom: 10px;
+  padding-bottom:30px;
+  padding-top:25px;
 }
 
 body {
@@ -69,19 +71,21 @@ body {
 
 
 .name {
+  position:fixed;
+  left:50px;
+  flex-direction: column;
   text-align: center;
-  padding: 1%;
+  padding: 5px;
   margin: 20px auto;
-  border-radius: 5%;
+  border-radius: 5px;
 }
 .name::placeholder {
   color: black; /* Set the placeholder text color to black */
 }
 .bed {
   position: fixed;
-  top: 15%;
+  top: 23%;
   left: 1%;
-  height: 40vh;
   width: 80%;
   display: flex;
   align-items: center;
@@ -89,30 +93,46 @@ body {
   z-index: 1;
 }
 
-.dimensions {
-  display: flex;
-  
-}
-
-.dimension {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  
-}
-
-label {
+.heightLabel {
+  position: fixed;
   font-weight: bold;
+  right: 270px;
   color:white;
   font-size:0.75rem;
+  top:35px;
 }
 
-.height,
-.width {
-  width: 10%;
+.height{
+  position:fixed;
+  right:210px;
+  width: 40px;
   padding: 1%;
   border-radius: 5%;
   text-align:center;
+  padding: 5px;
+  border-radius: 5px;
+  top:28px;
+  
+}
+.widthLabel {
+  position: fixed;
+  font-weight: bold;
+  color:white;
+  right:150px;
+  font-size:0.75rem;
+  top:35px;
+}
+.width {
+  position:fixed;
+  right:90px;
+  top:28px;
+  width: 40px;
+  padding: 1%;
+  border-radius: 5%;
+  text-align:center;
+  padding: 5px;
+  border-radius: 5px;
+  
   
 }
 
@@ -120,17 +140,18 @@ label {
   position: relative;
   background-color: rgb(82, 193, 65);
   color: white;
-  border-radius: 20%;
-  padding: 2%;
+  border-radius: 10px;
+  padding: 5px;
   font-weight: bold;
   cursor: pointer;
-  width: 10%;
+  width: 40px;
   border: none;
   outline: none;
   cursor: pointer;
-  right: 20px;/* Add margin to the left for space */
+  right: 20px;
   transition: all 0.3s ease;
-  font-size: 24px; /* Add a smooth transition effect */
+  font-size: 20px; 
+  top:2px;
 }
 
 .btnSave:hover::after {
@@ -172,11 +193,11 @@ label {
   cursor: pointer;
   background-color: #e74c3c;
   color: white;
-  border-radius:15%;
-  padding: 3%;
+  border-radius:10px;
+  padding: 15px;
   font-weight: bold;
   cursor: pointer;
-  width:25%;
+  width:150px;
 }
 
 .btnDelete:hover{
@@ -189,14 +210,14 @@ label {
   top: 15%;
   right: 1%;
   height: 40vh;
-  width: 8%;
+  width: 50px;
   background-color: #006400;
   color: #fff;
-  padding: 5%;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 25px;
+  border-radius: 15px;
 }
 
 .delete-modal {
@@ -239,3 +260,4 @@ label {
 .sideBar button:hover {
   background-color: #003300;
 }
+/* SaveConfirmationModal.css */

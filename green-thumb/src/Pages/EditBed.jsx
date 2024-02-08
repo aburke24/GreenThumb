@@ -6,7 +6,7 @@ import GardenBed from '../GardenBed Comp/GardenBed';
 import './EditBed.css';
 import DeleteModal from '../components/DeleteModal';
 import SideBar from '../components/SideBar';
-import { MdCheck, MdClose } from 'react-icons/md';
+import { MdClose, MdCheck } from 'react-icons/md';
 import BasilImage from '../Assets/Basil.jpeg';
 import TomatoImage from '../Assets/Tomato.jpeg';
 import CabbageImage from '../Assets/Cabbage.jpeg';
@@ -14,12 +14,19 @@ import PepperImage from '../Assets/Peppers.jpeg';
 import EggPlantImage from '../Assets/Egg Plant.jpeg';
 import DillImage from '../Assets/Dill.png';
 
-const plantImages = [BasilImage, TomatoImage, PepperImage, DillImage, CabbageImage, EggPlantImage];
 
-  const getRandomPlantImage = () => {
-    const randomIndex = Math.floor(Math.random() * plantImages.length);
-    return plantImages[randomIndex];
-  };
+const plantImages = [BasilImage, TomatoImage, PepperImage, DillImage, CabbageImage, EggPlantImage];
+const ConfirmationModal = ({ onConfirm, onCancel }) => {
+  return (
+    <div className="modal">
+      <p className="question">Are you sure you want to change the bed size? This will remove all plants.</p>
+      <div className="modal-buttons">
+      <button className = "cancel"onClick={() => { onCancel(); window.location.reload(); }}><MdClose/></button>
+      <button className = "save" onClick={onConfirm}><MdCheck/></button>
+      </div>
+    </div>
+  );
+};
 const EditBed = ({ bed, beds, setBeds }) => {
   const { id } = useParams();
   const bedId = parseInt(id);
@@ -35,6 +42,7 @@ const EditBed = ({ bed, beds, setBeds }) => {
   });
   const [height, setHeight] = useState(bed ? bed.gardenSize.height : 0);
   const [width, setWidth] = useState(bed ? bed.gardenSize.width : 0);
+  const [isModified, setIsModified] = useState(false);
 
   // State for managing clicked item index
   const [clickedItemIndex, setClickedItemIndex] = useState(null);
@@ -51,37 +59,61 @@ const EditBed = ({ bed, beds, setBeds }) => {
   // State for controlling addPlants functionality
   const [addPlantsActive, setAddPlantsActive] = useState(false);
   const [deletePlantActive, setDeletePlantActive] = useState(false);
+  const [generateBedTrigger, setGenerateBedTrigger] = useState(false);
+  const [isSaveConfirmationModalVisible, setIsSaveConfirmationModalVisible] = useState(false);
 
-  
+
+  const getRandomPlantImage = () => {
+    const randomIndex = Math.floor(Math.random() * plantImages.length);
+    return plantImages[randomIndex];
+  };
+
   // Handlers for input changes
-  const handleHeightChange = (e) => {
-    const newHeight = parseFloat(e.target.value);
-    setHeight(newHeight);
-    setGardenSize((prevGardenSize) => ({ ...prevGardenSize, height: newHeight }));
-  };
-  const generateBed = () => {
-    // Generate a random plant image for each grid item
-    const newPlants = Array(gardenSize.height * gardenSize.width).fill(null).map(() => ({
-      image: getRandomPlantImage(),
-    }));
+ // Handlers for input changes
+const generateBed = () => {
+  // Set the plants array to random plant images
+  setBeds((prevBeds) => {
+    const updatedBeds = prevBeds.map((prevBed) =>
+      prevBed.id === bedId
+        ? {
+            ...prevBed,
+            plants: Array.from(
+              { length: prevBed.gardenSize.height * prevBed.gardenSize.width },
+              (_, index) => ({
+                image: getRandomPlantImage(plantImages),
+                position: index,
+              })
+            ),
+          }
+        : prevBed
+    );
 
-    // Save the generated bed to the state
-    setBeds((prevBeds) => {
-      const updatedBeds = prevBeds.map((prevBed) =>
-        prevBed.id === bedId ? { ...prevBed, plants: newPlants } : prevBed
-      );
-      return updatedBeds;
-    });
+    // Mark the bed as generated
+    setIsBedCleared(false);
+    window.location.reload()
+    return updatedBeds;
+  });
 
-    // Set the generated bed to the current bed state
-    setPlants(newPlants);
-  };
+  // Toggle the trigger to show the updated bed immediately
+  setGenerateBedTrigger(!generateBedTrigger);
+};
 
 
+const handleHeightChange = (e) => {
+  const newHeight = parseFloat(e.target.value);
+  setHeight(newHeight);
+  setGardenSize((prevGardenSize) => ({ ...prevGardenSize, height: newHeight }));
+  setIsModified(true);
+  setGenerateBedTrigger(!generateBedTrigger); // Trigger bed generation when height changes
+   // Show the confirmation modal
+};
+  
   const handleWidthChange = (e) => {
     const newWidth = parseFloat(e.target.value);
     setWidth(newWidth);
     setGardenSize((prevGardenSize) => ({ ...prevGardenSize, width: newWidth }));
+    setIsModified(true);
+    setGenerateBedTrigger(!generateBedTrigger); // Trigger bed generation when width changes
   };
 
   // Effect to update height, width, and garden size when nbed changes
@@ -89,48 +121,66 @@ const EditBed = ({ bed, beds, setBeds }) => {
     setHeight(nbed.gardenSize.height);
     setWidth(nbed.gardenSize.width);
     setGardenSize({ height: nbed.gardenSize.height, width: nbed.gardenSize.width });
+    setName(nbed.name);
   }, [nbed]);
 
   // Function to clear the bed
   const clearBed = () => {
-    // Set the plants array to an empty array
+    // Set the plants array to an empty array for the specified bed
     setBeds((prevBeds) => {
       const updatedBeds = prevBeds.map((prevBed) =>
         prevBed.id === bedId ? { ...prevBed, plants: [] } : prevBed
       );
       return updatedBeds;
     });
-
+  
     // Mark the bed as cleared
     setIsBedCleared(true);
+    setGenerateBedTrigger(!generateBedTrigger); // Trigger bed generation when bed is cleared
   };
 
   // Handler for saving changes to the bed
+  // Handler for saving changes to the bed
+  // Handler for saving changes to the bed
   const handleBed = (e) => {
     e.preventDefault();
-
-    if (name || gardenSize.height || gardenSize.width) {
-      const updatedBed = { ...nbed, plants };
-
-      if (name) {
-        updatedBed.name = name;
-      }
-
-      if (gardenSize.height || gardenSize.width) {
-        updatedBed.gardenSize = { ...gardenSize };
-      }
-
+    console.log("The isModified is true");
+    console.log(isModified);
+    if (isModified) {
+      const updatedBed = { ...nbed, name, gardenSize, plants };
+  
       // Save gridContent as an array to local storage
       localStorage.setItem(`plants_${bedId}`, JSON.stringify(updatedBed.plants));
+  
+      // Update the bed in the beds array
+      setBeds((prevBeds) =>
+        prevBeds.map((prevBed) => (prevBed.id === bedId ? updatedBed : prevBed))
+      );
+  
+      // Update local storage
+      localStorage.setItem('beds', JSON.stringify(beds));
+  
+      // Toggle the trigger to show the updated bed immediately
+      setGenerateBedTrigger(!generateBedTrigger);
+  
+      setIsModified(false);
+      setName(updatedBed.name); // Update the name state immediately
+  
+      // Set the state to show the save confirmation modal
+      setIsSaveConfirmationModalVisible(true);
+      navigate('/');
     }
-
+  
     // Clear the bed if it was marked as cleared
     if (isBedCleared) {
+      console.log("The bed is cleared");
       clearBed();
     }
-
-    navigate('/');
+  
+    
   };
+
+  
 
   // Handler for button clicks
   const handleButtonClick = (buttonLabel) => {
@@ -180,7 +230,7 @@ const EditBed = ({ bed, beds, setBeds }) => {
       <header>
         <div className="backArrow">
           <Link to="/">
-            <IoIosArrowBack /> 
+            <IoIosArrowBack />
           </Link>
         </div>
         <input
@@ -191,86 +241,95 @@ const EditBed = ({ bed, beds, setBeds }) => {
           onChange={(e) => setName(e.target.value)}
           autoFocus
         />
-        <div className ="Dimensions" >
-
-        <label for="height">  Height: </label>
-        <input
-          type="number"
-          className="height"
-          placeholder={nbed.gardenSize.height}
-          value={height}
-          onChange={handleHeightChange}
-          autoFocus
-        />
-        <label for="width"> Width: </label>
-        <input
-          className="width"
-          type="number"
-          placeholder={nbed.gardenSize.width}
-          value={width}
-          onChange={handleWidthChange}
-          autoFocus
-        />
-        
-        </div>
-        <button className="btnSave" onClick={handleBed} style={{ marginRight: '10px' }}>
-          <MdCheck style={{ fontWeight: 'bold' }}/> 
-        </button>
-        
-
-      </header>
-
-      
-        
-
-        <SideBar
-          handleButtonClick={handleButtonClick}
-          setAddPlantsActive={setAddPlantsActive}
-          addPlantsActive={addPlantsActive}
-          selectedButton={selectedButton}
-          setSelectedButton={setSelectedButton}
-          onClearBedClick={clearBed} 
-          deletePlantActive={deletePlantActive}
-          setDeletePlantActive={setDeletePlantActive}
-          generateBed={generateBed}
-        />
-
-        <div className="bed">
-          <GardenBed
-            key={`${gardenSize.height}-${gardenSize.width}`}
-            id={nbed.id}
-            name={nbed.name}
-            gardenSize={gardenSize}
-            plants={nbed.plants}
-            beds={beds}
-            setBeds={setBeds}
-            displayName={false}
-            addPlantsActive={addPlantsActive}
-            clickedItemIndex={clickedItemIndex}
-            onGridItemClick={handleGridItemClick}
-            selectedButton={selectedButton}
-            isBedCleared={isBedCleared}
-            setIsBedCleared={setIsBedCleared}
-            deletePlantActive={deletePlantActive}
-            generateBed={generateBed}
-            isMainPage={false}
+        <div className="Dimensions">
+          <label className="heightLabel" htmlFor="height">Height:</label>
+          <input
+            type="number"
+            className="height"
+            placeholder={nbed.gardenSize.height}
+            value={height}
+            onChange={handleHeightChange}
+            autoFocus
+          />
+          <label className="widthLabel" htmlFor="width">Width:</label>
+          <input
+            className="width"
+            type="number"
+            placeholder={nbed.gardenSize.width}
+            value={width}
+            onChange={handleWidthChange}
+            autoFocus
           />
         </div>
-        
-        <button className="btnDelete" onClick={handleDelete}>
-         Delete Bed
+        <button className="btnSave" onClick={handleBed} style={{ marginRight: '10px' }}>
+          <MdCheck style={{ fontWeight: 'bold' }} />
         </button>
+        
+      </header>
+
+      <SideBar
+        handleButtonClick={handleButtonClick}
+        setAddPlantsActive={setAddPlantsActive}
+        addPlantsActive={addPlantsActive}
+        selectedButton={selectedButton}
+        setSelectedButton={setSelectedButton}
+        onClearBedClick={clearBed}
+        deletePlantActive={deletePlantActive}
+        setDeletePlantActive={setDeletePlantActive}
+        generateBed={generateBed}
+      />
+
+      <div className="bed">
+        <GardenBed
+          key={`${gardenSize.height}-${gardenSize.width}`}
+          id={nbed.id}
+          name={nbed.name}
+          gardenSize={gardenSize}
+          plants={nbed.plants}
+          beds={beds}
+          setBeds={setBeds}
+          displayName={false}
+          addPlantsActive={addPlantsActive}
+          clickedItemIndex={clickedItemIndex}
+          onGridItemClick={handleGridItemClick}
+          selectedButton={selectedButton}
+          isBedCleared={isBedCleared}
+          setIsBedCleared={setIsBedCleared}
+          deletePlantActive={deletePlantActive}
+          generateBed={generateBed}
+          isMainPage={false}
+          trigger={generateBedTrigger} // Pass the trigger as a prop
+        />
+      </div>
+
+      <button className="btnDelete" onClick={handleDelete}>
+        Delete Bed
+      </button>
 
       {isDeleteModalVisible && (
         <DeleteModal onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
       )}
+    {isSaveConfirmationModalVisible && (
+  <ConfirmationModal
+    onConfirm={() => {
+      // Handle the confirmation action
+      // (e.g., clear the bed)
+      clearBed();
+      setIsSaveConfirmationModalVisible(false);
+      setIsModified(false);
+      navigate('/');
+    }}
+    onCancel={() => setIsSaveConfirmationModalVisible(false)}
+  />
+)}
+      
     </div>
   );
 };
-
 EditBed.propTypes = {
   beds: PropTypes.array.isRequired,
   setBeds: PropTypes.func.isRequired,
 };
 
 export default EditBed;
+

@@ -137,8 +137,8 @@ const GardenBed = ({ link, id, name, gardenSize, plants, beds, setBeds, displayN
   }, [isBedCleared, id, isEditBedPage, plants, gardenSize]);
 
   return (
-    <div>
-      <div className="grid-container" style={{ '--max-grid-cell-width': calculateDynamicWidth()}}>
+    <div style={{ height: '100%' }}> {/* Set a fixed height based on grid cell height */}
+      <div className="grid-container" style={{ '--max-grid-cell-width': calculateDynamicWidth() }}>
         {[...Array(gardenSize.height)].map((_, rowIndex) => (
           <div key={rowIndex} className="grid-row">
             {[...Array(gardenSize.width)].map((_, colIndex) => (
