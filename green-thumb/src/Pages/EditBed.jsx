@@ -100,7 +100,7 @@ const generateBed = () => {
 
 
 const handleHeightChange = (e) => {
-  const newHeight = parseFloat(e.target.value);
+  const newHeight = parseFloat(e.target.value) || 1; // Convert empty or non-numeric values to 0
   setHeight(newHeight);
   setGardenSize((prevGardenSize) => ({ ...prevGardenSize, height: newHeight }));
   setIsModified(true);
@@ -109,7 +109,7 @@ const handleHeightChange = (e) => {
 };
   
   const handleWidthChange = (e) => {
-    const newWidth = parseFloat(e.target.value);
+    const newWidth = parseFloat(e.target.value) || 1; // Convert empty or non-numeric values to 0
     setWidth(newWidth);
     setGardenSize((prevGardenSize) => ({ ...prevGardenSize, width: newWidth }));
     setIsModified(true);
@@ -121,8 +121,15 @@ const handleHeightChange = (e) => {
     setHeight(nbed.gardenSize.height);
     setWidth(nbed.gardenSize.width);
     setGardenSize({ height: nbed.gardenSize.height, width: nbed.gardenSize.width });
-    setName(nbed.name);
+    setIsModified(true); // Update isModified to true when name changes
   }, [nbed]);
+
+  useEffect(() => {
+    if (name !== nbed.name) {
+      
+      handleBed(); // Trigger save when the name is modified
+    }
+  }, [name, nbed.name]);
 
   // Function to clear the bed
   const clearBed = () => {
@@ -143,11 +150,19 @@ const handleHeightChange = (e) => {
   // Handler for saving changes to the bed
   // Handler for saving changes to the bed
   const handleBed = (e) => {
-    e.preventDefault();
+    // Prevent the default form submission behavior
+    e && e.preventDefault();
+  
     console.log("The isModified is true");
     console.log(isModified);
+  
     if (isModified) {
-      const updatedBed = { ...nbed, name, gardenSize, plants };
+      const updatedBed = { ...nbed, gardenSize, plants };
+  
+      // Check if the name is not empty, then update it
+      if (name.trim() !== '') {
+        updatedBed.name = name.trim();
+      }
   
       // Save gridContent as an array to local storage
       localStorage.setItem(`plants_${bedId}`, JSON.stringify(updatedBed.plants));
@@ -164,11 +179,17 @@ const handleHeightChange = (e) => {
       setGenerateBedTrigger(!generateBedTrigger);
   
       setIsModified(false);
-      setName(updatedBed.name); // Update the name state immediately
   
-      // Set the state to show the save confirmation modal
-      setIsSaveConfirmationModalVisible(true);
-      navigate('/');
+      // Update the name state immediately only if it's not empty
+      if (name.trim() !== '') {
+        setName(updatedBed.name);
+      }
+  
+      // Check if only the name has changed
+      if (!(Object.keys(updatedBed).length === 1 && updatedBed.constructor === Object)) {
+        // Set the state to show the save confirmation modal
+        setIsSaveConfirmationModalVisible(false);
+      }
     }
   
     // Clear the bed if it was marked as cleared
@@ -176,11 +197,7 @@ const handleHeightChange = (e) => {
       console.log("The bed is cleared");
       clearBed();
     }
-  
-    
   };
-
-  
 
   // Handler for button clicks
   const handleButtonClick = (buttonLabel) => {
@@ -234,13 +251,14 @@ const handleHeightChange = (e) => {
           </Link>
         </div>
         <input
-          className="name"
-          type="text"
-          placeholder={nbed.name}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          autoFocus
-        />
+  className="name"
+  type="text"
+  placeholder={nbed.name}
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+  onBlur={handleBed}  // Trigger handleBed when the input field is deselected
+  autoFocus
+/>
         <div className="Dimensions">
           <label className="heightLabel" htmlFor="height">Height:</label>
           <input
@@ -309,19 +327,19 @@ const handleHeightChange = (e) => {
       {isDeleteModalVisible && (
         <DeleteModal onConfirm={handleConfirmDelete} onCancel={handleCancelDelete} />
       )}
-    {isSaveConfirmationModalVisible && (
-  <ConfirmationModal
-    onConfirm={() => {
-      // Handle the confirmation action
-      // (e.g., clear the bed)
-      clearBed();
-      setIsSaveConfirmationModalVisible(false);
-      setIsModified(false);
-      navigate('/');
-    }}
-    onCancel={() => setIsSaveConfirmationModalVisible(false)}
-  />
-)}
+          {isSaveConfirmationModalVisible && (
+        <ConfirmationModal
+          onConfirm={() => {
+            // Handle the confirmation action
+            // (e.g., clear the bed)
+            clearBed();
+            setIsSaveConfirmationModalVisible(false);
+            setIsModified(false);
+            
+          }}
+          onCancel={() => setIsSaveConfirmationModalVisible(false)}
+        />
+      )}
       
     </div>
   );

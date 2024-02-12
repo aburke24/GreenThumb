@@ -2,21 +2,18 @@
 
 .grid-container {
   display: flex;
-  
+  object-fit:contain;
 }
 
 .grid {
   display: flex;
   flex-wrap: wrap;
-  width: 500px; /* Adjust grid size as needed */
-}
-.grid-container{
-  object-fit:contain;
+
 }
 
 .grid-cell {
-  width: 50px; /* Set your desired width */
-  height: 50px; /* Set your desired height */
+  width: 50px; /* Set the width as a percentage of the container */
+  aspect-ratio: 1/1; /* Maintain a square aspect ratio (optional) */
   border: 2px solid white;
   box-sizing: border-box;
   transition: border-color 0.3s ease, background-color 0.3s ease;

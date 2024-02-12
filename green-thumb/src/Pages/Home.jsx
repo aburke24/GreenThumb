@@ -50,7 +50,8 @@ const Home = ({ beds, setBeds }) => {
               state: { bed, beds, setBeds },
             }}
           >
-            <GardenBed className = "GardenBed"
+            <GardenBed 
+              className = "Bedz"
               displayName={true}
               id={bed.id}
               name={bed.name}

@@ -19,34 +19,29 @@ const GardenBed = ({ link, id, name, gardenSize, plants, beds, setBeds, displayN
     plants
   };
   const calculateDynamicWidth = () => {
-    if (isMainPage) {
-      const maxGridCellWidth = 200; // Set your maximum width
-      const minGridCellWidth = 120; // Set your minimum width or adjust as needed
-      const screenWidth = window.innerWidth;
-
-      // Calculate the number of columns based on the screen width
-      const gridColumns = Math.floor(screenWidth / maxGridCellWidth);
-
-      // Ensure a minimum number of columns
-      const effectiveGridColumns = Math.max(1, gridColumns);
-
-      // Calculate the actual width of each grid cell
-      const actualGridCellWidth = Math.min(
-        maxGridCellWidth,
-        screenWidth / effectiveGridColumns
-      );
-
-      // Set the CSS variable for grid cell width
-      document.documentElement.style.setProperty(
-        "--grid-columns",
-        effectiveGridColumns
-      );
-
-      return `${actualGridCellWidth}px`;
-    }
-
-    // Return a default width if not on the main page
-    return '100%';
+    const maxGridCellWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--max-grid-cell-width'), 10);
+    const minGridCellWidth = 120; // Set your minimum width or adjust as needed
+    const screenWidth = window.innerWidth;
+  
+    // Calculate the number of columns based on the screen width
+    const gridColumns = Math.floor(screenWidth / maxGridCellWidth);
+  
+    // Ensure a minimum number of columns
+    const effectiveGridColumns = Math.max(1, gridColumns);
+  
+    // Calculate the actual width of each grid cell
+    const actualGridCellWidth = Math.min(
+      maxGridCellWidth,
+      screenWidth / effectiveGridColumns
+    );
+  
+    // Set the CSS variable for grid cell width
+    document.documentElement.style.setProperty(
+      "--grid-columns",
+      effectiveGridColumns
+    );
+  
+    return `${actualGridCellWidth}px`;
   };
   const [gridContent, setGridContent] = useState(() => {
     // Initialize from plants array or create an empty grid
